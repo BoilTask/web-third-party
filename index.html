@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三方库测试</title>
+    
+    <!-- 引用构建后的 katex CSS -->
+    <link defer rel="stylesheet" href="./dist/katex/katex.min.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .demo-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>第三方库测试</h1>
+    
+    <!-- Mermaid 测试 -->
+    <div class="demo-section">
+        <h2>Mermaid 图表测试</h2>
+        
+        <!-- 流程图示例 -->
+        <h3>1. 流程图</h3>
+        <div class="mermaid">
+            graph TD
+                A[开始] --> B{条件判断}
+                B -->|是| C[执行操作1]
+                B -->|否| D[执行操作2]
+                C --> E[结束]
+                D --> E
+        </div>
+        
+        <!-- 时序图示例 -->
+        <h3>2. 时序图</h3>
+        <div class="mermaid">
+            sequenceDiagram
+                participant 客户端
+                participant 服务器
+                客户端->>服务器: 请求数据
+                服务器->>客户端: 返回响应
+        </div>
+        
+        <!-- 甘特图示例 -->
+        <h3>3. 甘特图</h3>
+        <div class="mermaid">
+            gantt
+                title 项目计划
+                dateFormat  YYYY-MM-DD
+                section 设计
+                需求分析     :a1, 2023-01-01, 30d
+                系统设计     :after a1  , 20d
+                section 开发
+                后端开发     :2023-02-01, 30d
+                前端开发     :2023-02-15, 30d
+                section 测试
+                单元测试     :2023-03-01, 15d
+                集成测试     :after 单元测试, 15d
+        </div>
+    </div>
+    
+    <!-- KaTeX 测试 -->
+    <div class="demo-section">
+        <h2>KaTeX 数学公式测试</h2>
+        
+        <h3>1. 行内公式</h3>
+        <p>这是一个行内公式：<span class="katex-inline">$$E = mc^2$$</span></p>
+        <p>这是另一个行内公式：<span class="katex-inline">a^2 + b^2 = c^2</span></p>
+        
+        <h3>2. 块级公式</h3>
+        <div class="katex-block">
+            \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+        </div>
+        
+        <div class="katex-block">
+            \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+        </div>
+        
+        <div>
+            $$ \frac{d}{dx} \left( \int_{0}^{x} f(t) dt \right) = f(x) $$
+        </div>
+    </div>
+    
+    <!-- 引用构建后的 JavaScript 文件 -->
+    
+    <!-- Mermaid -->
+    <script type="module">
+        import mermaid from './dist/mermaid/mermaid.esm.min.mjs';
+        // 初始化 mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default'
+        });
+        console.log('Mermaid 已成功加载');
+    </script>
+    
+    <!-- KaTeX -->
+    <script src="./dist/katex/katex.min.js"></script>
+    <script src="./dist/katex/katex-auto-render.min.js"></script>
+    <script>
+        // 渲染 KaTeX 公式
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+                ]
+            });
+            
+            console.log('KaTeX 已成功加载');
+        });
+    </script>
+</body>
+</html>

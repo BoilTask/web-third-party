@@ -1,0 +1,26 @@
+{
+  "name": "boiltask-third-party",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BoilTask/web-third-party.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/BoilTask/web-third-party/issues"
+  },
+  "homepage": "https://github.com/BoilTask/web-third-party#readme",
+  "dependencies": {
+    "katex": "^0.16.28",
+    "mermaid": "^11.12.2"
+  }
+}
