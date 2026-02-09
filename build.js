@@ -32,7 +32,7 @@ const LIBRARIES = [
         source: path.join(__dirname, 'node_modules', 'mermaid', 'dist'),
         target: 'mermaid',
         files: [
-            { src: 'mermaid.esm.min.mjs', dest: 'mermaid.esm.min.mjs' },
+            { src: 'mermaid.esm.min.mjs', dest: 'mermaid.esm.min.js' },
             { src: 'mermaid.min.js', dest: 'mermaid.min.js' },
             { src: 'mermaid.js', dest: 'mermaid.js' }
         ],
