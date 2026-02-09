@@ -120,6 +120,35 @@
         </div>
     </div>
 
+    <!-- Crypto-JS 测试 -->
+    <div class="demo-section">
+        <h2>Crypto-JS 加密库测试</h2>
+
+        <h3>1. MD5 哈希</h3>
+        <p>原始文本: "Hello World"</p>
+        <p>MD5 哈希值: <span id="md5-result"></span></p>
+
+        <h3>2. SHA-256 哈希</h3>
+        <p>原始文本: "Hello World"</p>
+        <p>SHA-256 哈希值: <span id="sha256-result"></span></p>
+
+        <h3>3. AES 加密/解密</h3>
+        <p>原始文本: "这是一条需要加密的敏感信息"</p>
+        <p>加密密钥: "SecretKey123"</p>
+        <p>加密结果: <span id="aes-encrypted"></span></p>
+        <p>解密结果: <span id="aes-decrypted"></span></p>
+
+        <h3>4. Base64 编码/解码</h3>
+        <p>原始文本: "Base64 编码测试"</p>
+        <p>编码结果: <span id="base64-encoded"></span></p>
+        <p>解码结果: <span id="base64-decoded"></span></p>
+
+        <h3>5. HMAC-SHA256</h3>
+        <p>消息: "这是需要签名的消息"</p>
+        <p>密钥: "MySecretKey"</p>
+        <p>HMAC-SHA256 签名: <span id="hmac-result"></span></p>
+    </div>
+
     <div>
         pangu 测试
         <p>这是一个段落，包含一些中文和英文abcd混合的文本。</p>
@@ -128,6 +157,9 @@
     </div>
 
     <!-- 引用构建后的 JavaScript 文件 -->
+
+    <!-- Crypto-JS -->
+    <script src="./public/third-party/crypto-js/crypto-js.js"></script>
 
     <!-- Mermaid -->
     <script type="module">
@@ -156,6 +188,57 @@
             });
 
             console.log('KaTeX 已成功加载');
+        });
+    </script>
+
+    <!-- Crypto-JS 测试逻辑 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 检查 CryptoJS 是否加载成功
+            if (typeof CryptoJS === 'undefined') {
+                console.error('CryptoJS 加载失败');
+                return;
+            }
+
+            console.log('CryptoJS 已成功加载');
+
+            // 1. MD5 哈希测试
+            const md5Hash = CryptoJS.MD5("Hello World").toString();
+            document.getElementById('md5-result').textContent = md5Hash;
+            console.log('MD5:', md5Hash);
+
+            // 2. SHA-256 哈希测试
+            const sha256Hash = CryptoJS.SHA256("Hello World").toString();
+            document.getElementById('sha256-result').textContent = sha256Hash;
+            console.log('SHA-256:', sha256Hash);
+
+            // 3. AES 加密/解密测试
+            const aesKey = "SecretKey123";
+            const aesPlaintext = "这是一条需要加密的敏感信息";
+            const aesEncrypted = CryptoJS.AES.encrypt(aesPlaintext, aesKey).toString();
+            document.getElementById('aes-encrypted').textContent = aesEncrypted;
+            console.log('AES 加密:', aesEncrypted);
+
+            const aesDecrypted = CryptoJS.AES.decrypt(aesEncrypted, aesKey).toString(CryptoJS.enc.Utf8);
+            document.getElementById('aes-decrypted').textContent = aesDecrypted;
+            console.log('AES 解密:', aesDecrypted);
+
+            // 4. Base64 编码/解码测试
+            const base64Plaintext = "Base64 编码测试";
+            const base64Encoded = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(base64Plaintext));
+            document.getElementById('base64-encoded').textContent = base64Encoded;
+            console.log('Base64 编码:', base64Encoded);
+
+            const base64Decoded = CryptoJS.enc.Base64.parse(base64Encoded).toString(CryptoJS.enc.Utf8);
+            document.getElementById('base64-decoded').textContent = base64Decoded;
+            console.log('Base64 解码:', base64Decoded);
+
+            // 5. HMAC-SHA256 签名测试
+            const hmacMessage = "这是需要签名的消息";
+            const hmacKey = "MySecretKey";
+            const hmacSignature = CryptoJS.HmacSHA256(hmacMessage, hmacKey).toString();
+            document.getElementById('hmac-result').textContent = hmacSignature;
+            console.log('HMAC-SHA256:', hmacSignature);
         });
     </script>
 </body>

@@ -69,8 +69,24 @@ const LIBRARIES = [
         directories: [
             { src: '.', dest: '.' }
         ]
+    },
+    {
+        name: 'crypto-js',
+        source: path.join(__dirname, 'node_modules', 'crypto-js'),
+        target: 'crypto-js',
+        convertMjsToJs: false,
+        files: [
+            { src: 'crypto-js.js', dest: 'crypto-js.js' },
+            { src: 'md5.js', dest: 'md5.js' },
+            { src: 'sha1.js', dest: 'sha1.js' },
+            { src: 'sha256.js', dest: 'sha256.js' },
+            { src: 'sha512.js', dest: 'sha512.js' },
+            { src: 'aes.js', dest: 'aes.js' },
+            { src: 'hmac.js', dest: 'hmac.js' },
+            { src: 'enc-base64.js', dest: 'enc-base64.js' },
+            { src: 'enc-hex.js', dest: 'enc-hex.js' }
+        ]
     }
-    
 ];
 
 /**

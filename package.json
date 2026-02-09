@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/BoilTask/web-third-party#readme",
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "katex": "^0.16.28",
     "mermaid": "^11.12.2",
     "pangu": "^7.2.0"
