@@ -61,6 +61,15 @@ const LIBRARIES = [
             { src: 'fonts', dest: 'fonts' }
         ]
     },
+    {
+        name: 'pangu',
+        source: path.join(__dirname, 'node_modules', 'pangu', 'dist'),
+        target: 'pangu',
+        convertMjsToJs: false,
+        directories: [
+            { src: '.', dest: '.' }
+        ]
+    }
     
 ];
 

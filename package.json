@@ -21,6 +21,7 @@
   "homepage": "https://github.com/BoilTask/web-third-party#readme",
   "dependencies": {
     "katex": "^0.16.28",
-    "mermaid": "^11.12.2"
+    "mermaid": "^11.12.2",
+    "pangu": "^7.2.0"
   }
 }
