@@ -23,6 +23,7 @@ const CONFIG = {
  * - name: 库名称
  * - source: 源文件目录（相对于 node_modules）
  * - target: 目标目录（相对于 outputRoot）
+ * - convertMjsToJs: 是否将 .mjs 扩展名转换为 .js
  * - files: 要复制的单个文件列表
  * - directories: 要复制的目录列表
  */
@@ -31,6 +32,7 @@ const LIBRARIES = [
         name: 'mermaid',
         source: path.join(__dirname, 'node_modules', 'mermaid', 'dist'),
         target: 'mermaid',
+        convertMjsToJs: true,
         files: [
             { src: 'mermaid.esm.min.mjs', dest: 'mermaid.esm.min.js' },
             { src: 'mermaid.min.js', dest: 'mermaid.min.js' },
@@ -49,6 +51,7 @@ const LIBRARIES = [
         name: 'katex',
         source: path.join(__dirname, 'node_modules', 'katex', 'dist'),
         target: 'katex',
+        convertMjsToJs: false,
         files: [
             { src: 'katex.min.js', dest: 'katex.min.js' },
             { src: 'katex.min.css', dest: 'katex.min.css' },
@@ -57,7 +60,8 @@ const LIBRARIES = [
         directories: [
             { src: 'fonts', dest: 'fonts' }
         ]
-    }
+    },
+    
 ];
 
 /**
@@ -106,16 +110,54 @@ function log(message, type = 'info') {
 }
 
 /**
+ * 处理文件内容，将 .mjs 引用替换为 .js
+ * @param {string} filePath - 文件路径
+ */
+function processFileContent(filePath) {
+    try {
+        let content = fs.readFileSync(filePath, 'utf-8');
+        
+        // 替换 import 语句中的 .mjs 引用
+        content = content.replace(/(['"])([^'"]*\.mjs)\1/g, (match, quote, path) => {
+            return `${quote}${path.replace(/\.mjs$/, '.js')}${quote}`;
+        });
+        
+        // 替换动态 import() 中的 .mjs 引用
+        content = content.replace(/import\(['"]([^'"]*\.mjs)['"]\)/g, (match, path) => {
+            return `import('${path.replace(/\.mjs$/, '.js')}')`;
+        });
+        
+        fs.writeFileSync(filePath, content, 'utf-8');
+        log(`Processed references in: ${path.basename(filePath)}`, 'success');
+    } catch (error) {
+        log(`Failed to process file content ${path.basename(filePath)}: ${error.message}`, 'error');
+    }
+}
+
+/**
  * 复制单个文件
  * @param {string} src - 源文件路径
  * @param {string} dest - 目标文件路径
+ * @param {boolean} convertMjsToJs - 是否将 .mjs 扩展名转换为 .js
  * @returns {boolean} - 是否复制成功
  */
-function copyFile(src, dest) {
+function copyFile(src, dest, convertMjsToJs = false) {
     try {
         ensureDirectoryExists(path.dirname(dest));
-        fs.copyFileSync(src, dest);
-        log(`Copied: ${path.basename(src)} -> ${path.relative(__dirname, dest)}`, 'success');
+        
+        let finalDest = dest;
+        if (convertMjsToJs && src.endsWith('.mjs')) {
+            finalDest = dest.replace(/\.mjs$/, '.js');
+        }
+        
+        fs.copyFileSync(src, finalDest);
+        log(`Copied: ${path.basename(src)} -> ${path.relative(__dirname, finalDest)}`, 'success');
+        
+        // 如果转换了扩展名，处理文件内容中的引用
+        if (convertMjsToJs && src.endsWith('.mjs')) {
+            processFileContent(finalDest);
+        }
+        
         return true;
     } catch (error) {
         log(`Failed to copy ${path.basename(src)}: ${error.message}`, 'error');
@@ -127,8 +169,9 @@ function copyFile(src, dest) {
  * 递归复制目录
  * @param {string} srcDir - 源目录路径
  * @param {string} destDir - 目标目录路径
+ * @param {boolean} convertMjsToJs - 是否将 .mjs 扩展名转换为 .js
  */
-function copyDirectory(srcDir, destDir) {
+function copyDirectory(srcDir, destDir, convertMjsToJs = false) {
     ensureDirectoryExists(destDir);
     
     const entries = fs.readdirSync(srcDir, { withFileTypes: true });
@@ -138,9 +181,9 @@ function copyDirectory(srcDir, destDir) {
         const destPath = path.join(destDir, entry.name);
         
         if (entry.isDirectory()) {
-            copyDirectory(srcPath, destPath);
+            copyDirectory(srcPath, destPath, convertMjsToJs);
         } else {
-            copyFile(srcPath, destPath);
+            copyFile(srcPath, destPath, convertMjsToJs);
         }
     }
 }
@@ -155,13 +198,15 @@ function copyLibrary(library) {
     const libraryTarget = path.join(CONFIG.outputRoot, library.target);
     ensureDirectoryExists(libraryTarget);
     
+    const convertMjsToJs = library.convertMjsToJs || false;
+    
     // 复制单个文件
     if (library.files && library.files.length > 0) {
         log('Copying files...');
         library.files.forEach(file => {
             const srcPath = path.join(library.source, file.src);
             const destPath = path.join(libraryTarget, file.dest);
-            copyFile(srcPath, destPath);
+            copyFile(srcPath, destPath, convertMjsToJs);
         });
     }
     
@@ -172,7 +217,7 @@ function copyLibrary(library) {
             const srcPath = path.join(library.source, dir.src);
             const destPath = path.join(libraryTarget, dir.dest);
             log(`Copying directory: ${path.relative(__dirname, srcPath)} -> ${path.relative(__dirname, destPath)}`);
-            copyDirectory(srcPath, destPath);
+            copyDirectory(srcPath, destPath, convertMjsToJs);
         });
     }
     
