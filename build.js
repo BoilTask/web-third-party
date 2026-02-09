@@ -61,6 +61,18 @@ const LIBRARIES = [
 ];
 
 /**
+ * 清理目录（删除目录及其内容，然后重新创建）
+ * @param {string} dirPath - 目录路径
+ */
+function cleanDirectory(dirPath) {
+    if (fs.existsSync(dirPath)) {
+        fs.rmSync(dirPath, { recursive: true, force: true });
+        log(`✓ Cleaned directory: ${path.relative(__dirname, dirPath)}`);
+    }
+    fs.mkdirSync(dirPath, { recursive: true });
+}
+
+/**
  * 确保目录存在
  * @param {string} dirPath - 目录路径
  */
@@ -173,8 +185,8 @@ function copyLibrary(library) {
 function build() {
     log('Starting build process...', 'info');
     
-    // 确保输出根目录存在
-    ensureDirectoryExists(CONFIG.outputRoot);
+    // 清理并重新创建输出根目录
+    cleanDirectory(CONFIG.outputRoot);
     
     // 处理每个库
     LIBRARIES.forEach(library => {
