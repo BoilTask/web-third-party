@@ -3,6 +3,7 @@ node_modules/
 
 # 构建输出目录
 dist/
+public/
 
 # 日志文件
 logs/

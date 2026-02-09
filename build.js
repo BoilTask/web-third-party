@@ -9,7 +9,7 @@ const path = require('path');
 // 主配置
 const CONFIG = {
     // 输出根目录
-    outputRoot: path.join(__dirname, 'dist'),
+    outputRoot: path.join(__dirname, 'public', 'third-party'),
     // 日志配置
     log: {
         enabled: true,

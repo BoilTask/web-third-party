@@ -6,7 +6,7 @@
     <title>第三方库测试</title>
     
     <!-- 引用构建后的 katex CSS -->
-    <link defer rel="stylesheet" href="./dist/katex/katex.min.css">
+    <link defer rel="stylesheet" href="./public/third-party/katex/katex.min.css">
     
     <style>
         body {
@@ -103,7 +103,7 @@
     
     <!-- Mermaid -->
     <script type="module">
-        import mermaid from './dist/mermaid/mermaid.esm.min.js';
+        import mermaid from './public/third-party/mermaid/mermaid.esm.min.js';
         // 初始化 mermaid
         mermaid.initialize({
             startOnLoad: true,
@@ -113,8 +113,8 @@
     </script>
     
     <!-- KaTeX -->
-    <script src="./dist/katex/katex.min.js"></script>
-    <script src="./dist/katex/katex-auto-render.min.js"></script>
+    <script src="./public/third-party/katex/katex.min.js"></script>
+    <script src="./public/third-party/katex/katex-auto-render.min.js"></script>
     <script>
         // 渲染 KaTeX 公式
         document.addEventListener("DOMContentLoaded", function() {
